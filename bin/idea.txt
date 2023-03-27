@@ -1,0 +1,13 @@
+med history
+    2 table(prev/curr)
+    medicine taken,disease,doctor referred [symptoms TBA]
+    curr-cured(ek button) if clicked curr goes to prev
+
+    Add in curr table
+
+
+appointment
+    add/del an appointment
+    check upcoming appointment
+
+java -cp C:\Users\verma\OneDrive\Desktop\javaminiProject\lib\mysql.jar App.java
