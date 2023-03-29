@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class App {
     
-
+    static String currentUser= null;
     public static void main(String[] args) throws Exception {
         clearScreen();
         mainMenu();
@@ -174,7 +174,6 @@ public class App {
         System.out.println("========================================");
     }
 
-    static String currentUser= null;
     //login Module
     static void login() throws Exception {
 
@@ -228,11 +227,12 @@ public class App {
             System.out.println("2. View Appointment");
             System.out.println("3. Cancel Appointment");
             System.out.println("4. Add Medical History");
-            System.out.println("5. Current Medication");
-            System.out.println("6. Previous Medication");
-            System.out.println("7. View Medical History");
-            System.out.println("8. Edit Profile");
-            System.out.println("9. Logout");
+            System.out.println("5. Medicine Suggestion");
+            System.out.println("6. Current Medication");
+            System.out.println("7. Previous Medication");
+            System.out.println("8. View Medical History");
+            System.out.println("9. Edit Profile");
+            System.out.println("10. Logout");
             System.out.println ("========================================");
             System.out.print("Option: ");
             Scanner sc = new Scanner(System.in);
@@ -255,22 +255,25 @@ public class App {
                     // addMedicalHistory();
                     break;
                 case 5:
-                    clearScreen();
-                    // currentMedication();
+                    mds();
                     break;
                 case 6:
                     clearScreen();
-                    // previousMedication();
+                    //currentMedication();
                     break;
                 case 7:
                     clearScreen();
-                    // viewMedicalHistory();
+                    // previousMedication();
                     break;
                 case 8:
                     clearScreen();
-                    // editProfile();
+                    // viewMedicalHistory();
                     break;
                 case 9:
+                    clearScreen();
+                    // editProfile();
+                    break;
+                case 10:
                     clearScreen();
                     mainMenu();
                     i = 1;
@@ -286,4 +289,97 @@ public class App {
             }
         }
     }
+
+
+    static void mds()
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.println("USAGE WARNING:");
+        System.out.println("Please DO NOT take these suggestions over any prescribed medicines");
+        System.out.println("If you have a history of allergic reactions, we advise you to not use this module");
+        System.out.println("You are advised not to take any medications WITHOUT CONSULTING a doctor if the symptoms are severe and not improving.");
+        System.out.println("Please enter your symptoms (separated by commas): ");
+        String symptoms = input.nextLine();
+        System.out.println("Enter time in days since the symptoms started");
+        int time=input.nextInt();
+        String[] symptomList = symptoms.split(",");
+        
+         if (isSevere(symptomList,time)) 
+            {
+            System.out.println("Your symptoms are severe. Please see a doctor immediately.");
+            } 
+        else {
+            suggestMedicine(symptomList); 
+            }
+    }
+    public static boolean isSevere(String[] symptoms, int time) {
+        // List of 10 most common symptoms
+        String[] commonSymptoms = {"fever", "cough", "vomiting", "fatigue", "muscle aches","body ache", "headache", "sore throat", "congestion","runny nose", "nausea", "diarrhea"};
+        if(time>=10)
+            return true;
+        int count = 0;
+        for (String symptom : symptoms) {
+            if (Arrays.asList(commonSymptoms).contains(symptom.trim().toLowerCase())) {
+                count++;
+            }
+        }
+        return count < 3;
+    }
+    public static void suggestMedicine(String[] symptoms) {
+        List<String> matches = new ArrayList<>();
+        String[] commonSymptoms = {"fever", "cough", "vomiting", "fatigue", "muscle aches","body ache", "headache", "sore throat", "congestion","runny nose", "nausea", "diarrhea"};
+        for (String symptom : symptoms) {
+            if (Arrays.asList(commonSymptoms).contains(symptom)) {
+                matches.add(symptom);
+            }
+        }
+            if (matches.size() > 0) {
+                System.out.println("You have the following symptoms: " + String.join(", ", matches));
+                for (String symptom : matches) {
+                    switch (symptom) {
+                        case "fever":
+                            System.out.println("Take Dolo. Dosage: 650 mg for adults and 250 mg for children.");
+                            break;
+                        case "cough":
+                            System.out.println("Take Benadryl.");
+                            break;
+                        case "vomiting":
+                            System.out.println("Take small sips of oral rehydration solution (ORS) to prevent dehydration. Eat easy-to-digest foods like toast, crackers, gelatin or other similar foods to ease an upset stomach.");
+                            break;
+                        case "fatigue":
+                            System.out.println("Maintain a regular sleep schedule, eat a healthy diet, and exercise regularly. Consuming less caffeine during the day and avoiding caffeine at night may also help. Take some ORS and eat lots of fruits.");
+                            break;
+                        case "muscle aches":
+                            System.out.println("Take over-the-counter pain relievers such as aspirin, acetaminophen, ibuprofen or naproxen.");
+                            break;
+                        case "body ache":
+                            System.out.println("Take over-the-counter pain relievers such as aspirin, acetaminophen, ibuprofen or naproxen.");
+                            break;
+                        case "headache":
+                            System.out.println("Remedies that may reduce headache pain include aspirin, paracetamol and ibuprofen. Resting in a darkened room may also help.");
+                            break;
+                        case "sore throat":
+                            System.out.println("Taking pain medication such as ibuprofen and paracetamol may help. Avoid giving aspirin to children because this may cause a rare, serious condition.");
+                            break;
+                        case "congestion":
+                            System.out.println("Inhale karvol plus.");
+                            break;
+                        case "runny nose":
+                            System.out.println("Drink plenty of water and use a humidifier to relieve symptoms. If the runny nose is caused by allergies, taking a non-sedating antihistamine may also help.");
+                            break;
+                        case "nausea":
+                            System.out.println("Take Kaopectate or Pepto-Bismol. Resting, eating bland foods and avoiding strong food odours, perfume, smoke and stuffy rooms may help to reduce nausea.");
+                            break;
+                        case "diarrhea":
+                            System.out.println("Replace lost fluids with an oral rehydration solution (ORS) and take antidiarrhoeal drugs such as loperamide to help prevent dehydration.");
+                            break;
+                    }
+                }
+            } else {
+                System.out.println("We could not find any matches for your symptoms or your symptoms are not common. Please see a doctor.");
+            }
+    }
+    
+
+
 }
