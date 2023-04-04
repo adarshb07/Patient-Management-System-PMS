@@ -16,7 +16,7 @@ public class App {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/pms";
             String username = "root";
-            String password = "1234";
+            String password = "";
             Connection conn = DriverManager.getConnection(url, username, password); //To Establish connection
             Statement stmt = conn.createStatement();
             return stmt;
@@ -56,7 +56,10 @@ public class App {
                     closeCmd();
                     System.exit(0);
                     break;
-
+                case 4:
+                    mds();
+                    
+                    break;
                 default:
                     clearScreen();
                     System.out.println("Invalid choice");
@@ -255,6 +258,10 @@ public class App {
                     // addMedicalHistory();
                     break;
                 case 5:
+                    clearScreen();
+                    System.out.println("------------------------------------------------------------------------------");
+                    System.out.println("Welcome " + currentUser+" to the Patient Management System(PMS)");
+                    System.out.println("------------------------------------------------------------------------------");
                     mds();
                     break;
                 case 6:
@@ -276,7 +283,7 @@ public class App {
                 case 10:
                     clearScreen();
                     mainMenu();
-                    i = 1;
+                    
                     break;
                 default:
                     clearScreen();
@@ -299,24 +306,35 @@ public class App {
         System.out.println("If you have a history of allergic reactions, we advise you to not use this module");
         System.out.println("You are advised not to take any medications WITHOUT CONSULTING a doctor if the symptoms are severe and not improving.");
         System.out.println("Please enter your symptoms (separated by commas): ");
-        String symptoms = input.nextLine();
+        String symptoms = input.next();
         System.out.println("Enter time in days since the symptoms started");
         int time=input.nextInt();
+        //input.nextLine();
         String[] symptomList = symptoms.split(",");
         
-         if (isSevere(symptomList,time)) 
+         if (!(isSevere(symptomList,time)) )
             {
+            System.out.println("-------------------------------------------------");
             System.out.println("Your symptoms are severe. Please see a doctor immediately.");
+            System.out.println("-------------------------------------------------");
+            System.out.println("Press any key to continue");
+            input.nextLine();
+            input.nextLine();
             } 
         else {
+            System.out.println("-------------------------------------------------");
             suggestMedicine(symptomList); 
+            System.out.println("If the symptoms persist, please see a doctor");
+            System.out.println("-------------------------------------------------");
+            System.out.println("Press any key to continue");
+            input.nextLine();
+            input.nextLine();
             }
     }
     public static boolean isSevere(String[] symptoms, int time) {
-        // List of 10 most common symptoms
         String[] commonSymptoms = {"fever", "cough", "vomiting", "fatigue", "muscle aches","body ache", "headache", "sore throat", "congestion","runny nose", "nausea", "diarrhea"};
         if(time>=10)
-            return true;
+            return false;    
         int count = 0;
         for (String symptom : symptoms) {
             if (Arrays.asList(commonSymptoms).contains(symptom.trim().toLowerCase())) {
